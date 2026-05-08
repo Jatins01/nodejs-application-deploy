@@ -27,17 +27,16 @@ jobs:
             #Go to Project directory
             cd ~/nodejs-application-deploy
 
-            #Pull latest code
             git pull origin main
 
-            #Stop old containers
+            
             docker compose down
 
-            #Remove old unused images
+            
             docker system prune -af
 
-            #Build and start containers
+            
             docker compose up -d --build
 
-            #show running containers
+           
             docker ps
