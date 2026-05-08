@@ -1,42 +1,34 @@
 name: Deploy Node.js Application to EC2 (CI/CD Pipeline)
 
-on: # on every push in branch - main
- push:
-  branches:
-    - main
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    # step 1: Checkout Latest Code where your github actions runs
-    steps: 
+    steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-    # step 2: Connect to EC2 and deploy
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@v4
+        uses: appleboy/ssh-action@v1.0.3
 
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
 
-          script:
-            #Go to Project directory
+          script: |
             cd ~/nodejs-application-deploy
 
             git pull origin main
 
-            
             docker compose down
 
-            
-            docker system prune -af
+            docker compose up --build -d
 
-            
-            docker compose up -d --build
-
-           
             docker ps
