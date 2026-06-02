@@ -1,4 +1,4 @@
-name: CI/CD pipeline For Node.js Application Deployment to EC2
+name: Test SSH
 
 on:
   push:
@@ -6,30 +6,20 @@ on:
       - main
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Deploy to EC2
+      - name: Test SSH Connection
         uses: appleboy/ssh-action@v1.0.3
 
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
+          username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
 
           script: |
-
-            cd ~/nodejs-application-deploy
-
-            git pull origin main
-
-            sudo docker compose down
-
-            sudo docker compose up --build -d
-
-            sudo docker ps 
+            whoami
+            hostname
+            pwd
