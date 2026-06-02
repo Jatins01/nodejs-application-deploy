@@ -1,4 +1,4 @@
-name: CI/CD pipeline for Node.js Application
+name: CI/CD pipeline For Node.js Application Deployment to EC2
 
 on:
   push:
