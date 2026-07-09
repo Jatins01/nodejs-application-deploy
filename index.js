@@ -1,12 +1,7 @@
-import express from 'express'
+import app from "./app.js";
 
-const app = express()
-const PORT = process.env.PORT ?? 8080 // if PORT given otherwise i use 8080
-
-app.get('/', (req, res) => {         //make root and recieve request and response
-    return res.json({ msg: 'Hello from the server - CI/CD Test'}) //set response in json that gives message
-})
+const PORT = process.env.PORT ?? 8080;
 
 app.listen(PORT, () => {
-    console.log(`Server is up and running on PORT ${PORT}`)
-})
+  console.log(`Server is up and running on PORT ${PORT}`);
+});

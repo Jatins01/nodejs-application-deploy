@@ -6,7 +6,28 @@ on:
       - main
 
 jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
   deploy:
+    name: Deploy to EC2
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -15,21 +36,25 @@ jobs:
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
-
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          port: 22
 
           script: |
-            whoami
+
             cd ~/nodejs-application-deploy
 
             git pull origin main
 
-            sudo docker compose down || true
+            docker compose down || true
 
-            sudo docker compose up --build -d
+            docker compose up --build -d
 
-            sudo docker ps
+            docker ps
+
+            sleep 10
+
+             curl --fail http://localhost:8080
+
+            echo "Deployment completed successfully."
