@@ -61,13 +61,13 @@ jobs:
             docker run -d \
               --name nodeapp \
               --restart unless-stopped \
-              -p 3000:3000 \
+              -p 8080:8080 \
               ${{ secrets.DOCKER_USERNAME }}/node-cicd:latest
 
             sleep 10
 
             docker ps
 
-            curl --fail http://localhost:3000
+            curl --fail http://localhost:8080 || exit 1
 
             echo "Deployment completed successfully!"
